@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import type { Product, Category } from '../../types';
+import type { Product } from '../../types';
 import { useProducts } from '../../context/ProductContext';
-import { useLocation } from 'react-router-dom';
 
 interface ProductFormProps {
   product?: Product;
@@ -23,8 +22,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onClose }) => {
     featured: false,
   });
 
-  const location = useLocation();
-
   useEffect(() => {
     if (product) {
       setFormData({
@@ -39,16 +36,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ product, onClose }) => {
         featured: product.featured,
       });
     }
-    if (location.state?.newOrder) {
-      setUserOrders(prev => {
-        // Add newOrder if not already present
-        if (!prev.some(order => order._id === location.state.newOrder._id)) {
-          return [location.state.newOrder, ...prev];
-        }
-        return prev;
-      });
-    }
-  }, [product, location.state]);
+  }, [product]);
 
   const selectedCategory = categories.find(cat => cat.slug === formData.category);
 
